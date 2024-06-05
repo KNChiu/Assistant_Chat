@@ -14,6 +14,18 @@ model = os.getenv("model")
 llm = ChatOpenAI(temperature=1.0, model=model)
 encoding = tiktoken.encoding_for_model(model)
 
+def change_prompt(choice: str) -> str:
+    if choice == "Code Pilot":
+        return "你是一個生活在台灣的資深軟體工程師，使用 python 為主的程式語言，請根據提問生成合適的程式碼，並使用繁體中文條列說明功能"
+    elif choice == "專業知識問答":
+        return "你是一位人工智慧領域的專家，請專業並有邏輯的使用繁體中文回答問題"
+    elif choice == "文章重點總結":
+        return "你是一位重點統整的專家，請依據輸入的內容統整成簡短且有意義的文字，使用繁體中文回答"
+    elif choice == "中英對翻":
+        return "依據輸入的文字，判斷是英文還是中文，如果輸入是英文翻譯成通順的中文，如果輸入是中文則翻譯成通順的英文"
+    else:
+        return "使用繁體中文回應以下問題"
+
 def num_tokens_from_string(string: str) -> int:
     encoding = tiktoken.encoding_for_model(model)
     num_tokens = len(encoding.encode(string))
@@ -29,28 +41,33 @@ def predict(system_prompt, message, history):
 
     return gpt_response.content
 
-with gr.Blocks() as demo: 
-    def userSet(message, history):
+def userSet(message, history):
         return "", history + [[message, ""]]
     
-    def chat(system_prompt, history):
-        history[-1][1] = predict(system_prompt, history[-1][0], history[:-1])
-        num_tokens = num_tokens_from_string(system_prompt + str(history))
+def chat(system_prompt, history):
+    history[-1][1] = predict(system_prompt, history[-1][0], history[:-1])
+    num_tokens = num_tokens_from_string(system_prompt + str(history))
 
-        return history, f"Send ({str(num_tokens)})"
-    
-    def clear_chat():
-        return "", "Send (0)"
-    
+    return history, f"Send ({str(num_tokens)})"
+
+def clear_chat():
+    return "", "Send (0)"
+
+with gr.Blocks() as demo: 
     with gr.Row():
         chatbot = gr.Chatbot(height=300)
         history = gr.State(value=[])
 
-    with gr.Row():  
+    with gr.Row(): 
+        system_prompt_radio = gr.Radio(
+                ["Code Pilot", "專業知識問答", "文章重點總結", "中英對翻", "無"], show_label=False
+        )
+
+    with gr.Row():
         with gr.Accordion("System Prompt", open=False) as accordion:
             system_prompt_input = gr.Textbox(
                 placeholder="輸入 system prompt", 
-                value="你是一個生活在台灣的資深軟體工程師，使用 python 為主的程式語言，請根據提問生成合適的程式碼，並條列說明功能",
+                value="",
                 show_label=False
             )
 
@@ -62,6 +79,12 @@ with gr.Blocks() as demo:
         clear_button  = gr.Button("Clear")
     
     num_tokens = 0
+
+    system_prompt_radio.change(
+        fn=change_prompt, 
+        inputs=system_prompt_radio, 
+        outputs=system_prompt_input
+    )
 
     submit_button.click(
         fn=userSet,
