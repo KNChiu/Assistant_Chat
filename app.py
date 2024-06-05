@@ -57,6 +57,16 @@ with gr.Blocks() as demo:
         inputs=[system_prompt_input, chatbot],
         outputs=[chatbot, submit_button]
     )
+    
+    message.submit(
+        fn=userinterface.user_set,
+        inputs=[message, chatbot],
+        outputs=[message, chatbot] 
+    ).then(
+        fn=llmgenerate.chat_QA,
+        inputs=[system_prompt_input, chatbot],
+        outputs=[chatbot, submit_button]
+    )
         
     clear_button.click(
         fn=userinterface.clear_chat,
