@@ -15,6 +15,15 @@ llm = ChatOpenAI(temperature=1.0, model=model)
 encoding = tiktoken.encoding_for_model(model)
 
 def change_prompt(choice: str) -> str:
+    """
+    Return different prompt messages based on the user's choice
+
+    Parameters:
+    choice (str): The user's choice
+
+    Returns:
+    str: The corresponding prompt message for the choice, respond in Traditional Chinese by default
+    """
     if choice == "Code Pilot":
         return "你是一個生活在台灣的資深軟體工程師，使用 python 為主的程式語言，請根據提問生成合適的程式碼，並使用繁體中文條列說明功能"
     elif choice == "專業知識問答":
