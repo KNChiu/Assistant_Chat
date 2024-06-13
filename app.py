@@ -24,7 +24,7 @@ with gr.Blocks() as demo:
 
     with gr.Row(): 
         system_prompt_radio = gr.Radio(
-                ["Code Pilot", "專業知識問答", "文章重點總結", "中英對翻", "Google 搜尋", "無"], show_label=False
+                ["Code", "問答", "總結", "翻譯", "搜尋", "無"], show_label=False
         )
 
     with gr.Row():
