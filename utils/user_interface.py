@@ -1,4 +1,4 @@
-class UserInterface():
+class UserInterface:
     def __init__(self) -> None:
         pass
 
@@ -25,8 +25,8 @@ class UserInterface():
         else:
             return "使用繁體中文回應以下問題"
 
-    def user_set(self, message, history):
+    def user_set(self, message: str, history: list) -> tuple:
         return "", history + [[message, ""]]
 
-    def clear_chat(self):
+    def clear_chat(self) -> tuple:
         return "", "Send (0)"
