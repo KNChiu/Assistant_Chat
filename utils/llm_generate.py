@@ -26,3 +26,12 @@ class LLMGenerate():
         num_tokens = self._tokens_calculation(system_prompt + str(history))
 
         return history, f"Send ({str(num_tokens)})"
+    
+if __name__ == "__main__":
+    model = 'gpt-3.5-turbo'
+    system_prompt = "你是一位AI助手，解決人們的問題"
+    history = [["台灣最高的山是?", ""]]
+
+    llmgenerate = LLMGenerate(model)
+
+    llmgenerate.chat_QA(system_prompt, history)
