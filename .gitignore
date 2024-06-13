@@ -1,3 +1,4 @@
 *.env
 *.bat
 *.pyc
+chroma_db_oai

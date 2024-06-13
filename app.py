@@ -4,11 +4,16 @@ import gradio as gr
 
 from utils.user_interface import UserInterface
 from utils.llm_generate import LLMGenerate
+from utils.google_search import SearchQA
 
 from dotenv import load_dotenv
 load_dotenv()
 
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+
+os.environ["GOOGLE_CSE_ID"] = os.getenv("GOOGLE_CSE_ID")
+os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
+
 model = os.getenv("model")
 
 
@@ -19,7 +24,7 @@ with gr.Blocks() as demo:
 
     with gr.Row(): 
         system_prompt_radio = gr.Radio(
-                ["Code Pilot", "專業知識問答", "文章重點總結", "中英對翻", "無"], show_label=False
+                ["Code Pilot", "專業知識問答", "文章重點總結", "中英對翻", "Google 搜尋", "無"], show_label=False
         )
 
     with gr.Row():
@@ -40,7 +45,18 @@ with gr.Blocks() as demo:
     num_tokens = 0
 
     userinterface = UserInterface()
+    
+    searchqa = SearchQA(model)
     llmgenerate = LLMGenerate(model)
+
+    def task_choice(system_prompt_radio, system_prompt_input, chatbot):
+        if system_prompt_radio == "Google 搜尋":
+            chatbot[-1][1], _ = searchqa.search_QA(chatbot[-1][0])
+            submit_button = "Send (search)"
+        else:
+            chatbot, submit_button = llmgenerate.chat_QA(system_prompt_input, chatbot)
+
+        return chatbot, submit_button
 
     system_prompt_radio.change(
         fn=userinterface.change_prompt, 
@@ -53,8 +69,8 @@ with gr.Blocks() as demo:
         inputs=[message, chatbot],
         outputs=[message, chatbot] 
     ).then(
-        fn=llmgenerate.chat_QA,
-        inputs=[system_prompt_input, chatbot],
+        fn=task_choice,
+        inputs=[system_prompt_radio, system_prompt_input, chatbot],
         outputs=[chatbot, submit_button]
     )
     
@@ -63,8 +79,8 @@ with gr.Blocks() as demo:
         inputs=[message, chatbot],
         outputs=[message, chatbot] 
     ).then(
-        fn=llmgenerate.chat_QA,
-        inputs=[system_prompt_input, chatbot],
+        fn=task_choice,
+        inputs=[system_prompt_radio, system_prompt_input, chatbot],
         outputs=[chatbot, submit_button]
     )
         

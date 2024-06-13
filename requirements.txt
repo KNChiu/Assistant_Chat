@@ -7,3 +7,5 @@ langchain-core==0.2.3
 langchain-openai==0.1.8
 langchain-text-splitters==0.2.0
 langchainhub==0.1.15
+beautifulsoup4==4.12.3
+langchain-google-community==1.0.5
