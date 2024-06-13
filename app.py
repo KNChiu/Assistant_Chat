@@ -19,30 +19,31 @@ model = os.getenv("model")
 
 with gr.Blocks() as demo: 
     with gr.Row():
-        chatbot = gr.Chatbot(height=300)
+        chatbot = gr.Chatbot(height=350)
         history = gr.State(value=[])
 
     with gr.Row():
-        with gr.Column(scale=6):
-            system_prompt_radio = gr.Radio(
-                choices=["Code", "問答", "總結", "翻譯", "搜尋", "無"],
-                show_label=False
-            )
-            
-        with gr.Column(scale=1):
-            model_dropdown = gr.Dropdown(
-                choices=['gpt-3.5-turbo', 'gpt-4o'],
-                value='gpt-3.5-turbo',
-                show_label=False
-            )
+        with gr.Accordion("Setting", open=False) as accordion:
+            with gr.Row():
+                system_prompt_input = gr.Textbox(
+                    placeholder="輸入 system prompt", 
+                    value="",
+                    show_label=False
+                )
 
-    with gr.Row():
-        with gr.Accordion("System Prompt", open=False) as accordion:
-            system_prompt_input = gr.Textbox(
-                placeholder="輸入 system prompt", 
-                value="",
-                show_label=False
-            )
+            with gr.Row():
+                with gr.Column(scale=6):
+                    system_prompt_radio = gr.Radio(
+                        choices=["Code", "問答", "總結", "翻譯", "搜尋", "無"],
+                        show_label=False
+                    )
+                    
+                with gr.Column(scale=1):
+                    model_dropdown = gr.Dropdown(
+                        choices=['gpt-3.5-turbo', 'gpt-4o'],
+                        value='gpt-3.5-turbo',
+                        show_label=False
+                    )
 
     with gr.Row():
         message = gr.Textbox(placeholder="輸入對話", show_label=False)
