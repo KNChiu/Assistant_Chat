@@ -9,3 +9,5 @@ langchain-text-splitters==0.2.0
 langchainhub==0.1.15
 beautifulsoup4==4.12.3
 langchain-google-community==1.0.5
+chromadb==0.5.0
+html2text==2024.2.26
