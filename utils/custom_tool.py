@@ -27,6 +27,8 @@ class TranslateTool(BaseTool):
         targetLang: str = "zh-TW",
         text: str = None,
     ):
+        print(f"Tool: TranslateTool | {targetLang}, {text}")
+
         if targetLang and text:
             return f"""將以下文字片段{text}翻譯成通順的{targetLang}"""
         else:
@@ -48,7 +50,8 @@ class CopilotTool(BaseTool):
         language: str = "python",
         code: str = None,
     ):
-    
+        print(f"Tool: CopilotTool | {language}")
+
         return f"""你是一位資深軟體工程師，請依據{code}生成或是修改成合適的{language}程式碼，並使用繁體中文條列說明功能"""
 
 class ProfessionalInput(BaseModel):
@@ -65,7 +68,8 @@ class ProfessionalTool(BaseTool):
         self,
         question: str,
     ):
-    
+        print(f"Tool: ProfessionalTool | {question}")
+
         return f"""你是一位人工智慧領域的專家，請專業並有邏輯的使用繁體中文回答，問題: {question}"""
 
 
