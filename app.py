@@ -31,8 +31,8 @@ with gr.Blocks() as demo:
                     )
                 with gr.Column(scale=1):
                     model_dropdown = gr.Dropdown(
-                        choices=["gpt-3.5-turbo", "gpt-4o"],
-                        value="gpt-3.5-turbo",
+                        choices=["gpt-3.5-turbo", "gpt-4o-mini", "gpt-4o"],
+                        value="gpt-4o-mini",
                         show_label=False,
                     )
 
